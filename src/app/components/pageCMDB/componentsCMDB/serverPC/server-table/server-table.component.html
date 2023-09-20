@@ -1,0 +1,30 @@
+<div class="table-container">
+  <table class="table-servers">
+    <tr class="table-header">
+      <th><input class="select-all-servers" type="checkbox"></th>
+      <th></th>
+      <th>Название</th>
+      <th>Тип</th>
+      <th>Расположение</th>
+      <th>Орг.единица</th>
+      <th>Инв.номер</th>
+      <th>Теги</th>
+      <th>Дата создания</th>
+      <th>Дата обновления</th>
+      <th>Дата аудита</th>
+    </tr>
+    <tr *ngFor="let server of serverPCdata$ | slice:0:numRecordsServer; let serverIndex = index" class="server-unit">
+      <th><input type="checkbox"></th>
+      <th>{{ serverIndex + 1}}</th>
+      <th>{{ server.serverName | cutWord: 11}}</th>
+      <th>{{ server.serverType }}</th>
+      <th>{{ server.serverLocation }}</th>
+      <th>{{ server.serverOrgUnit }}</th>
+      <th>{{ server.serverInventNum }}</th>
+      <th>{{ server.serverTag }}</th>
+      <th>{{ server.serverDateCreate | date:'yyyy-MM-dd HH:mm:ss' }}</th>
+      <th>{{ server.serverDateUpd | date:'yyyy-MM-dd HH:mm:ss' }}</th>
+      <th>{{ server.serverDateAudit | date:'yyyy-MM-dd HH:mm:ss'}}</th>
+    </tr>
+  </table>
+</div>

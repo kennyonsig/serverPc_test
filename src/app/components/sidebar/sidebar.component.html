@@ -1,0 +1,16 @@
+<div class="sidebar">
+  <ul *ngFor="let unit of unitsSideBar" class="ul-sidebar">
+    <div (click)="toggleSideBar(unit.typeSB)" class="link-icon-block">
+      <a [routerLink]="unit.typeSB" class="link-ul-sb" routerLinkActive="branch-sidebar-ul-active">{{ unit.nameSB }}</a>
+      <fa-icon [icon]="dropDownIcon"
+               [ngClass]="activeListType === unit.typeSB && isShowUnitSideBar ? 'fa-rotate-180' : ''"></fa-icon>
+    </div>
+    <div *ngIf="isShowUnitSideBar && activeListType === unit.typeSB" class="{{ unit.typeSB }}-block">
+      <li *ngFor="let itemSideBar of unit.itemsSB">
+        <a [routerLink]="itemSideBar.linkItemSB"
+           class="link-li-sb"
+           routerLinkActive="branch-sidebar-li-active">{{ itemSideBar.nameItemSB }}</a>
+      </li>
+    </div>
+  </ul>
+</div>

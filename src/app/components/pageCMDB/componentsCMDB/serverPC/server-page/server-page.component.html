@@ -1,0 +1,40 @@
+<div class="server-page">
+  <h2 class="title-page">Серверы и ПК</h2>
+  <div class="records-search-block">
+    <p>Записи с {{ startIndex + 1}} - {{ endIndex }} из {{ totalRecordsServer }} </p>
+    <app-find-server></app-find-server>
+  </div>
+  <app-server-table [numRecordsServer]="numRecordsServer"></app-server-table>
+  <div class="pagination-wrapper">
+    <div class="page-amount-block">
+
+      <div class="page-navigation-block">
+        <button (click)="setPage(currentPage - 1)" [disabled]="currentPage == 1"
+                class="previous-page">
+          <fa-icon [icon]="arrowLeftIcon"></fa-icon>
+        </button>
+        <p> {{ currentPage }} из {{ totalPages }}</p>
+        <button (click)="setPage(currentPage + 1)" [disabled]="currentPage == totalPages"
+                class="next-page">
+          <fa-icon [icon]="arrowRightIcon"></fa-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="page-size-block">
+      <label class="label-page-size">Количество записей
+        <input (click)="togglePageSizeDropdown()"
+               [(ngModel)]="numRecordsServer"
+               [value]="pageSizeOptions"
+               class="input-page-size"
+               readonly="readonly"
+               type="text">
+      </label>
+      <ul *ngIf="showPageSizeDropdown" class="page-size-drop-down">
+        <li (click)="selectPageSize(pageSize)" *ngFor="let pageSize of pageSizeOptions ">
+          {{ pageSize }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

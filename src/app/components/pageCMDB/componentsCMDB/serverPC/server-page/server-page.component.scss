@@ -1,0 +1,75 @@
+.records-search-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  min-height: 30px;
+}
+
+.server-page {
+  min-height: 100%;
+}
+
+.title-page {
+  margin-bottom: 30px;
+}
+
+app-find-server {
+  flex-basis: 50%;
+}
+
+//pagination
+
+.pagination-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.page-size-block {
+  position: relative;
+}
+
+.input-page-size {
+  text-align: center;
+  max-width: 50px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.label-page-size {
+  cursor: pointer;
+}
+
+.page-size-drop-down {
+  position: absolute;
+  background-color: white;
+  list-style-type: none;
+  box-shadow: -1px 4px 11px 4px rgba(34, 60, 80, 0.2);
+  z-index: 1;
+  min-width: 87%;
+  bottom: 40px;
+
+  li {
+    cursor: pointer;
+    padding: 4px;
+
+    &:hover {
+      background-color: #92b1f2;
+    }
+  }
+}
+
+.page-navigation-block {
+  display: flex;
+  gap: 10px;
+}
+
+.previous-page, .next-page {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    scale: 0.9;
+  }
+}

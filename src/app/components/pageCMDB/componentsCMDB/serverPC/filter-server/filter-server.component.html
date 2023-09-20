@@ -1,0 +1,46 @@
+<div class="filter-block">
+  <div class="title-and-close">
+    <p class="title-filter">Фильтры</p>
+    <button (click)="closeFilter()" class="close-filter-block-btn">
+      <fa-icon [icon]="crossIcon" class="cross-icon fa-2xl"></fa-icon>
+    </button>
+  </div>
+  <div class="type-pc pc-block">
+    <p>Тип ПК</p>
+    <input (click)="toggleTypeDropdown()"
+           [value]="selectedType"
+           class="input-toggle input-in-filter"
+           placeholder="Выбрать"
+           readonly="readonly"
+           type="text">
+    <ul *ngIf="showTypeDropdown" class="type-drop-down">
+      <li (click)="selectType(pcType)" *ngFor="let pcType of pcTypes">
+        {{ pcType }}
+      </li>
+    </ul>
+  </div>
+  <div class="tag-pc pc-block">
+    <p>Тег</p>
+    <input (click)="toggleTagDropdown()"
+           [value]="selectedTag"
+           class="input-toggle input-in-filter"
+           placeholder="Выбрать"
+           readonly="readonly"
+           type="text">
+    <ul *ngIf="showTagDropdown" class="tag-drop-down">
+      <input class="search-tag-input input-in-filter"
+             placeholder="Найти тег">
+      <li (click)="selectTag(pcTag)" *ngFor="let pcTag of pcTags">
+        {{ pcTag }}
+      </li>
+    </ul>
+  </div>
+  <div class="filter-btn">
+    <button (click)="useFilter()"
+            class="accept-filter-btn">Применить
+    </button>
+    <button (click)="clearFilter()"
+            class="clear-filter-btn">Сбросить
+    </button>
+  </div>
+</div>

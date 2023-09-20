@@ -1,0 +1,18 @@
+<div class="find-and-filter">
+  <div class="input-filter-block">
+    <input (input)="findListInput()"
+           [(ngModel)]="findServerByName"
+           class="search-input"
+           placeholder="Введите имя сервера или ПК"
+           type="text">
+    <button (click)="toggleFilter()" class="filter-btn">
+      <fa-icon [icon]="filterIcon"></fa-icon>
+    </button>
+  </div>
+  <div *ngIf="isShowFilter" class="app-filter-block">
+    <app-filter-server (isCloseFilter)="toggleFilter()"
+                       (pcTag)="getPcTag = $event"
+                       (pcType)="getPcType = $event"
+                       [findServer]="findServerByName"></app-filter-server>
+  </div>
+</div>

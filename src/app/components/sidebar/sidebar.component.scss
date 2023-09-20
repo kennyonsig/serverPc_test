@@ -1,0 +1,55 @@
+.sidebar {
+  width: 200px;
+  margin-right: 50px;
+}
+
+//routerLinkActive при активной ссылке в ul
+.branch-sidebar-ul-active {
+  color: #add1e9;
+}
+
+//ul стили
+.link-ul-sb {
+  background-color: transparent;
+  border: none;
+  min-height: 20px;
+  min-width: 200px;
+  text-align: left;
+  padding: 5px;
+
+  &:hover {
+    color: #72c0ee;
+  }
+}
+
+.ul-sidebar {
+  margin-bottom: 5px;
+  padding: 10px;
+  list-style-type: none;
+}
+
+//li стили
+.link-li-sb {
+  font-size: 12px;
+  color: black;
+  padding: 10px;
+  margin-bottom: 5px;
+
+  &:hover {
+    background-color: rgba(178, 213, 234, 0.61);
+  }
+}
+
+//routerLinkActive при активной ссылке в li
+.branch-sidebar-li-active {
+  background-color: rgba(178, 213, 234, 0.61);
+  color: #4848ee;
+}
+
+//Блок ссылки и иконки шапки списка
+.link-icon-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}

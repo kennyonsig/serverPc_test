@@ -1,0 +1,50 @@
+.find-and-filter {
+  display: flex;
+}
+
+.search-input {
+  min-width: 100%;
+  padding: 5px;
+  border: 1px solid #8a8787;
+  border-radius: 2px;
+
+  &:hover {
+    border: 1px solid #72c0ee;
+  }
+
+  &:focus {
+    border: 1px solid #72c0ee;
+    outline: none;
+  }
+}
+
+
+.input-filter-block {
+  position: relative;
+  flex-grow: 1;
+}
+
+app-filter-server {
+  position: absolute;
+  right: 200px;
+  top: 138px
+}
+
+.filter-btn {
+  position: absolute;
+  right: 11px;
+  top: 6px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: transform .5s ease;
+  color: #a09d9d;
+
+  &:active {
+    color: #739fea;
+  }
+
+  &:hover {
+    opacity: .8;
+  }
+}

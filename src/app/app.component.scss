@@ -1,0 +1,17 @@
+.app {
+  min-height: 100vh;
+  padding: 20px 150px 20px 20px;
+}
+
+.main-content {
+  display: flex;
+}
+
+app-sidebar {
+  flex-basis: 10%;
+}
+
+.content {
+  flex-basis: 90%;
+}
+

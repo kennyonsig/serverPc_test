@@ -1,0 +1,112 @@
+.filter-block {
+  min-width: 300px;
+  min-height: 250px;
+  background-color: white;
+  box-shadow: -1px 4px 11px 4px rgba(34, 60, 80, 0.2);
+}
+
+.title-and-close {
+  display: flex;
+  justify-content: space-between;
+  align-items: center
+}
+
+.title-filter {
+  font-size: 25px;
+  padding: 10px;
+}
+
+.pc-block {
+  padding: 20px;
+  position: relative;
+}
+
+//закрыть блок фильтра
+.close-filter-block-btn {
+  border: none;
+  background-color: transparent;
+  padding: 20px;
+  cursor: pointer;
+}
+
+// Кнопки применить и сбросить
+.filter-btn {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid black;
+  padding: 20px;
+}
+
+.accept-filter-btn, .clear-filter-btn {
+  padding: 8px;
+  border: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform .5s ease;
+
+  &:active {
+    transform: scale(.9);
+    opacity: .8;
+  }
+}
+
+.accept-filter-btn {
+  margin-right: 10px;
+  background-color: #4848ee;
+  color: white;
+
+  &:hover {
+    background-color: rgba(72, 72, 238, 0.79);
+  }
+}
+
+.clear-filter-btn {
+  background-color: rgba(173, 169, 169, 0.43);
+
+  &:hover {
+    background-color: #eeebeb;
+  }
+}
+
+//блок списков тегов и типов
+.type-drop-down, .tag-drop-down {
+  position: absolute;
+  background-color: white;
+  list-style-type: none;
+  box-shadow: -1px 4px 11px 4px rgba(34, 60, 80, 0.2);
+  z-index: 1;
+  min-width: 87%;
+  top: 82px;
+
+  li {
+    cursor: pointer;
+    padding: 4px;
+
+    &:hover {
+      background-color: #92b1f2;
+    }
+  }
+}
+
+//ввод типов и тегов + поиск тегов
+.input-in-filter {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  outline: none;
+  min-width: 100%;
+
+  &:hover, &:focus {
+    border: 1px solid #7a7af1;
+  }
+}
+
+.input-toggle {
+  cursor: pointer;
+}
+
+.search-tag-input {
+  margin: 5px;
+  min-width: 96%;
+}
