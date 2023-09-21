@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, debounceTime, map, Observable } from 'rxjs';
+import { BehaviorSubject, debounceTime, map, Observable, of } from 'rxjs';
 import { IServerData } from '../../../../interface/IServerData';
 import { serversData } from '../../../../mock/dataServerPC';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -63,5 +63,9 @@ export class ServerPCService {
           .includes(findServerName.toLowerCase()));
       })
     );
+  }
+
+  getPageData(startIndex: number, numRecords: number): Observable<IServerData[]> {
+    return of(serversData.slice(startIndex, startIndex + numRecords));
   }
 }

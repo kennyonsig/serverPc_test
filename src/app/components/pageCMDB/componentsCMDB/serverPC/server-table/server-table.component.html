@@ -21,7 +21,9 @@
       <th>{{ server.serverLocation }}</th>
       <th>{{ server.serverOrgUnit }}</th>
       <th>{{ server.serverInventNum }}</th>
-      <th>{{ server.serverTag }}</th>
+      <th>
+        <div *ngFor="let tag of server.serverTag">{{ tag }}</div>
+      </th>
       <th>{{ server.serverDateCreate | date:'yyyy-MM-dd HH:mm:ss' }}</th>
       <th>{{ server.serverDateUpd | date:'yyyy-MM-dd HH:mm:ss' }}</th>
       <th>{{ server.serverDateAudit | date:'yyyy-MM-dd HH:mm:ss'}}</th>

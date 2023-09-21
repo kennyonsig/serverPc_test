@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
+import { Subscription } from 'rxjs';
 import { ServerPCService } from '../server-pc.service';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-filter-server',
@@ -77,3 +77,4 @@ export class FilterServerComponent implements OnInit, OnDestroy {
     }
   }
 }
+
