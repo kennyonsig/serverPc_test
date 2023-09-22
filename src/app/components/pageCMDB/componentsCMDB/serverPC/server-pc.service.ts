@@ -19,16 +19,6 @@ export class ServerPCService {
     return this.serverPCdata$.getValue();
   }
 
-  filterServerData(findServerName: string, pcType: string, pcTag: string) {
-    const filteredServers: IServerData[] = serversData
-      .filter((server: IServerData) =>
-        server.serverName?.toLowerCase().includes(findServerName.toLowerCase()) &&
-        (!pcType || server.serverType === pcType) &&
-        (!pcTag || server.serverTag.includes(pcTag)));
-    this.serverPCdata$.next(filteredServers);
-  }
-
-
   updateQueryParams(pcType: string, pcTag: string, findServerName: string) {
     this.router.navigate([], {
       relativeTo: this.route,
@@ -55,14 +45,18 @@ export class ServerPCService {
     });
   }
 
-  findServer(findServerName: string): Observable<IServerData[]> {
-    return this.serverPCdata$.pipe(
-      debounceTime(500),
+  filterServerData(findServerName: string, pcType: string, pcTag: string) {
+    this.serverPCdata$.pipe(
+      debounceTime(200),
       map((servers: IServerData[]) => {
-        return servers.filter((server: IServerData) => server.serverName?.toLowerCase()
-          .includes(findServerName.toLowerCase()));
+        return servers.filter((server: IServerData) =>
+          server.serverName?.toLowerCase().includes(findServerName) &&
+          (!pcType || server.serverType === pcType) &&
+          (!pcTag || server.serverTag.includes(pcTag)));
       })
-    );
+    ).subscribe((filteredServers: IServerData[]) => {
+      this.serverPCdata$.next(filteredServers);
+    });
   }
 
   getPageData(startIndex: number, numRecords: number): Observable<IServerData[]> {

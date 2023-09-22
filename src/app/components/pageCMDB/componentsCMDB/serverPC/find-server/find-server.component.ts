@@ -3,7 +3,6 @@ import { faFilter } from '@fortawesome/free-solid-svg-icons/faFilter';
 import { ServerPCService } from '../server-pc.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { IServerData } from '../../../../../interface/IServerData';
 
 @Component({
   selector: 'app-find-server',
@@ -16,7 +15,6 @@ export class FindServerComponent implements OnInit, OnDestroy {
   findServerByName: string;
   @Input() getPcType: string;
   @Input() getPcTag: string;
-  private subFindServer: Subscription;
   private subParams: Subscription;
 
   constructor(private serverPCService: ServerPCService,
@@ -32,17 +30,9 @@ export class FindServerComponent implements OnInit, OnDestroy {
     });
   }
 
-  findListInput() {
-    if (this.subFindServer) {
-      this.subFindServer.unsubscribe();
-    }
-    this.subFindServer = this.serverPCService
-      .findServer(this.findServerByName)
-      .subscribe((findServerName: IServerData[]) => {
-        console.log(findServerName);
-      });
+  findServerInput() {
     this.serverPCService.updateQueryParams(this.getPcType, this.getPcTag, this.findServerByName);
-    this.serverPCService.filterServerData(this.findServerByName, this.getPcType, this.getPcTag);
+    this.serverPCService.filterServerData(this.findServerByName.trim().toLowerCase(), this.getPcType, this.getPcTag);
   }
 
   toggleFilter() {
@@ -50,9 +40,6 @@ export class FindServerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.subFindServer) {
-      this.subFindServer.unsubscribe();
-    }
     if (this.subParams) {
       this.subParams.unsubscribe();
     }
