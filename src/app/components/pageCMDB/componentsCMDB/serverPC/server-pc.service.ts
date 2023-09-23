@@ -9,7 +9,8 @@ import { ActivatedRoute, Router } from '@angular/router';
   providedIn: 'root'
 })
 export class ServerPCService {
-  serverPCdata$: BehaviorSubject<IServerData[]> = new BehaviorSubject<IServerData[]>(serversData);
+  private readonly serverPCdata: IServerData[] = serversData;
+  serverPCdata$: BehaviorSubject<IServerData[]> = new BehaviorSubject<IServerData[]>(this.serverPCdata);
 
   constructor(private route: ActivatedRoute,
               private router: Router) {
@@ -45,8 +46,8 @@ export class ServerPCService {
     });
   }
 
-  filterServerData(findServerName: string, pcType: string, pcTag: string) {
-    this.serverPCdata$.pipe(
+  filterServerData(findServerName: string, pcType: string, pcTag: string): Observable<IServerData[]> {
+    return of(this.serverPCdata).pipe(
       debounceTime(200),
       map((servers: IServerData[]) => {
         return servers.filter((server: IServerData) =>
@@ -54,12 +55,10 @@ export class ServerPCService {
           (!pcType || server.serverType === pcType) &&
           (!pcTag || server.serverTag.includes(pcTag)));
       })
-    ).subscribe((filteredServers: IServerData[]) => {
-      this.serverPCdata$.next(filteredServers);
-    });
+    );
   }
 
   getPageData(startIndex: number, numRecords: number): Observable<IServerData[]> {
-    return of(serversData.slice(startIndex, startIndex + numRecords));
+    return of(this.serverPCdata.slice(startIndex, startIndex + numRecords));
   }
 }

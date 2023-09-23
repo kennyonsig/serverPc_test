@@ -29,7 +29,6 @@ export class ServerPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.totalRecordsServer = this.serverPCService.getServerPC().length;
     this.totalPages = Math.ceil(this.totalRecordsServer / this.numRecordsServer);
-
   }
 
   togglePageSizeDropdown() {
