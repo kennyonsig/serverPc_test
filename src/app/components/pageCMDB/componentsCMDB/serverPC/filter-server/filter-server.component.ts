@@ -38,34 +38,41 @@ export class FilterServerComponent implements OnInit, OnDestroy {
       });
   }
 
+  //скрыть/показать список типов
   toggleTypeDropdown() {
     this.showTypeDropdown = !this.showTypeDropdown;
   }
 
+  //скрыть/показать список тегов
   toggleTagDropdown() {
     this.showTagDropdown = !this.showTagDropdown;
   }
 
+  //выбрать тип
   selectType(pcType: string) {
     this.selectedType = pcType;
     this.showTypeDropdown = false;
   }
 
+  //выбрать тег
   selectTag(pcTag: string) {
     this.selectedTag = pcTag;
     this.showTagDropdown = false;
   }
 
+  //закрыть фильтр
   closeFilter() {
     this.isCloseFilter.emit();
   }
 
+  //применить фильтры
   useFilter() {
     this.pcTag.emit(this.selectedTag);
     this.pcType.emit(this.selectedType);
     this.updateServerData();
   }
 
+  //очистить фильтры и params фильтров
   clearFilter() {
     this.selectedType = '';
     this.selectedTag = '';
@@ -73,6 +80,7 @@ export class FilterServerComponent implements OnInit, OnDestroy {
     this.updateServerData();
   }
 
+  //обновление данных params и фильтрации записей
   updateServerData() {
     this.serverPCService.updateQueryParams(this.selectedType, this.selectedTag, this.findServer);
     this.serverPCService.filterServerData(

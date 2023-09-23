@@ -16,6 +16,7 @@ export class FindServerComponent implements OnInit, OnDestroy {
   findServerByName: string;
   @Input() getPcType: string;
   @Input() getPcTag: string;
+
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(private serverPCService: ServerPCService,
@@ -29,12 +30,11 @@ export class FindServerComponent implements OnInit, OnDestroy {
         this.getPcType = params['pc_type'] || '';
         this.getPcTag = params['pc_tag'] || '';
         this.findServerByName = params['server_name'] || '';
-        this.serverPCService.filterServerData(this.findServerByName, this.getPcType, this.getPcTag);
+        this.updateServerData();
       });
-
-    this.updateServerData();
   }
 
+  //обновление param и фильтрация таблицы
   updateServerData() {
     this.serverPCService.updateQueryParams(this.getPcType, this.getPcTag, this.findServerByName);
     this.serverPCService.filterServerData(
@@ -47,10 +47,12 @@ export class FindServerComponent implements OnInit, OnDestroy {
       });
   }
 
+  //поиск сервера по названию
   findServerInput() {
     this.updateServerData();
   }
 
+  //скрыть/показать блок фильтра
   toggleFilter() {
     this.isShowFilter = !this.isShowFilter;
   }

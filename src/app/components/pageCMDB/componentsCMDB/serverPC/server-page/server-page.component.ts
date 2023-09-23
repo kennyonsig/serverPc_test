@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ServerPCService } from '../server-pc.service';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
@@ -11,7 +11,7 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrls: ['./server-page.component.scss']
 })
 export class ServerPageComponent implements OnInit, OnDestroy {
-  pageSizeOptions = [13, 15, 20];
+  pageSizeOptions = [5, 13, 15, 20, 100];
   numRecordsServer = 13;
   startIndex = 0;
   endIndex = this.numRecordsServer;
@@ -24,18 +24,24 @@ export class ServerPageComponent implements OnInit, OnDestroy {
   readonly arrowLeftIcon = faChevronLeft;
   readonly arrowRightIcon = faChevronRight;
 
+  @Input() getPcType: string;
+  @Input() getPcTag: string;
+  @Input() findServerByName: string;
+
   constructor(private serverPCService: ServerPCService) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.totalRecordsServer = this.serverPCService.getServerPC().length;
-    this.totalPages = Math.ceil(this.totalRecordsServer / this.numRecordsServer);
+    this.totalPages = this.getTotalPages();
   }
 
-  togglePageSizeDropdown() {
+  //переключения окна выбора количества записей
+  togglePageSizeDropdown(): void {
     this.showPageSizeDropdown = !this.showPageSizeDropdown;
   };
 
+  //выбор количества записей на странице
   selectPageSize(pageSize: number): void {
     this.numRecordsServer = pageSize;
     this.currentPage = 1;
@@ -44,16 +50,19 @@ export class ServerPageComponent implements OnInit, OnDestroy {
     this.updateServerData();
   };
 
-  setPage(page: number) {
+  //выбор страницы
+  setPage(page: number): void {
     this.currentPage = page;
     this.updateServerData();
   }
 
+  //обновление данных на странице
   updateServerData(): void {
-    this.totalPages = Math.ceil(this.totalRecordsServer / this.numRecordsServer);
-    this.startIndex = (this.currentPage - 1) * this.numRecordsServer;
-    this.endIndex = Math.min(this.currentPage * this.numRecordsServer, this.totalRecordsServer);
+    this.totalPages = this.getTotalPages();
+    this.startIndex = this.getStartIndex();
+    this.endIndex = this.getEndIndex();
 
+    //отображение записей в завивмости от выбранного количества
     this.serverPCService
       .getPageData(this.startIndex, this.numRecordsServer)
       .pipe(takeUntil(this.destroy$))
@@ -62,7 +71,22 @@ export class ServerPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnDestroy() {
+  //получение количества страниц
+  getTotalPages(): number {
+    return Math.ceil(this.totalRecordsServer / this.numRecordsServer);
+  }
+
+  //получение начального индекса "Запись с startIndex - endIndex"
+  getStartIndex(): number {
+    return (this.currentPage - 1) * this.numRecordsServer;
+  }
+
+  //получение конечного индекса "Запись с startIndex - endIndex"
+  getEndIndex(): number {
+    return Math.min(this.currentPage * this.numRecordsServer, this.totalRecordsServer);
+  }
+
+  ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
   }

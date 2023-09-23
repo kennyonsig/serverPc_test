@@ -16,10 +16,12 @@ export class ServerPCService {
               private router: Router) {
   }
 
+  //получение записей
   getServerPC(): IServerData[] {
     return this.serverPCdata$.getValue();
   }
 
+  // обновление params
   updateQueryParams(pcType: string, pcTag: string, findServerName: string) {
     this.router.navigate([], {
       relativeTo: this.route,
@@ -33,6 +35,7 @@ export class ServerPCService {
     });
   }
 
+  //очистка params
   clearQueryParams() {
     this.router.navigate([], {
       relativeTo: this.route,
@@ -42,6 +45,7 @@ export class ServerPCService {
     });
   }
 
+  //фильтрация таблицы
   filterServerData(findServerName: string, pcType: string, pcTag: string): Observable<IServerData[]> {
     return of(this.serverPCdata).pipe(
       debounceTime(200),

@@ -9,12 +9,12 @@
     <div class="page-amount-block">
 
       <div class="page-navigation-block">
-        <button (click)="setPage(currentPage - 1)" [disabled]="currentPage == 1"
+        <button (click)="setPage(currentPage - 1)" [disabled]="currentPage === 1"
                 class="previous-page">
           <fa-icon [icon]="arrowLeftIcon"></fa-icon>
         </button>
         <p> {{ currentPage }} из {{ totalPages }}</p>
-        <button (click)="setPage(currentPage + 1)" [disabled]="currentPage == totalPages"
+        <button (click)="setPage(currentPage + 1)" [disabled]="currentPage === totalPages"
                 class="next-page">
           <fa-icon [icon]="arrowRightIcon"></fa-icon>
         </button>
