@@ -3,7 +3,7 @@ import { ServerPCService } from '../server-pc.service';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
 import { IServerData } from '../../../../../interface/IServerData';
-import { Subscription } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-server-page',
@@ -11,17 +11,18 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./server-page.component.scss']
 })
 export class ServerPageComponent implements OnInit, OnDestroy {
-  showPageSizeDropdown = false;
   pageSizeOptions = [13, 15, 20];
   numRecordsServer = 13;
-  totalRecordsServer: number;
   startIndex = 0;
   endIndex = this.numRecordsServer;
-  totalPages: number;
   currentPage = 1;
+
+  totalRecordsServer: number;
+  showPageSizeDropdown = false;
+  totalPages: number;
+  destroy$: Subject<boolean> = new Subject<boolean>();
   readonly arrowLeftIcon = faChevronLeft;
   readonly arrowRightIcon = faChevronRight;
-  private subElementPage: Subscription;
 
   constructor(private serverPCService: ServerPCService) {
   }
@@ -37,24 +38,32 @@ export class ServerPageComponent implements OnInit, OnDestroy {
 
   selectPageSize(pageSize: number): void {
     this.numRecordsServer = pageSize;
+    this.currentPage = 1;
     this.endIndex = this.numRecordsServer;
     this.showPageSizeDropdown = false;
-    this.totalPages = Math.ceil(this.totalRecordsServer / this.numRecordsServer);
+    this.updateServerData();
   };
 
   setPage(page: number) {
     this.currentPage = page;
-    this.startIndex = (page - 1) * this.numRecordsServer;
-    this.endIndex = Math.min(page * this.numRecordsServer, this.totalRecordsServer);
+    this.updateServerData();
+  }
 
-    this.subElementPage = this.serverPCService.getPageData(this.startIndex, this.numRecordsServer).subscribe((serverData: IServerData[]) => {
-      this.serverPCService.serverPCdata$.next(serverData);
-    });
+  updateServerData(): void {
+    this.totalPages = Math.ceil(this.totalRecordsServer / this.numRecordsServer);
+    this.startIndex = (this.currentPage - 1) * this.numRecordsServer;
+    this.endIndex = Math.min(this.currentPage * this.numRecordsServer, this.totalRecordsServer);
+
+    this.serverPCService
+      .getPageData(this.startIndex, this.numRecordsServer)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((serverData: IServerData[]) => {
+        this.serverPCService.serverPCdata$.next(serverData);
+      });
   }
 
   ngOnDestroy() {
-    if (this.subElementPage) {
-      this.subElementPage.unsubscribe();
-    }
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 }

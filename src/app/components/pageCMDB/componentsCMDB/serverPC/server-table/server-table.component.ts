@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { IServerData } from '../../../../../interface/IServerData';
 import { ServerPCService } from '../server-pc.service';
-import { Subscription } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-server-table',
@@ -11,18 +11,19 @@ import { Subscription } from 'rxjs';
 export class ServerTableComponent implements OnInit, OnDestroy {
   @Input() numRecordsServer: number;
   serverPCdata$: IServerData[];
-  private subTableServerData: Subscription;
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(private serverPCService: ServerPCService) {
   }
 
   ngOnInit() {
-    this.subTableServerData = this.serverPCService.serverPCdata$.subscribe((data: IServerData[]) => this.serverPCdata$ = data);
+    this.serverPCService.serverPCdata$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data: IServerData[]) => this.serverPCdata$ = data);
   }
 
   ngOnDestroy() {
-    if (this.subTableServerData) {
-      this.subTableServerData.unsubscribe();
-    }
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 }

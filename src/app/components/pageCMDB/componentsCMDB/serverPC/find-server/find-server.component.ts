@@ -1,8 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { faFilter } from '@fortawesome/free-solid-svg-icons/faFilter';
 import { ServerPCService } from '../server-pc.service';
-import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { ActivatedRoute, Params } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { IServerData } from '../../../../../interface/IServerData';
 
 @Component({
@@ -16,31 +16,39 @@ export class FindServerComponent implements OnInit, OnDestroy {
   findServerByName: string;
   @Input() getPcType: string;
   @Input() getPcTag: string;
-  private subParams: Subscription;
-  private filterSubscription: Subscription;
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(private serverPCService: ServerPCService,
               private route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.subParams = this.route.queryParams.subscribe(params => {
-      this.getPcType = params['pc_type'] || '';
-      this.getPcTag = params['pc_tag'] || '';
-      this.findServerByName = params['server_name'] || '';
-      this.serverPCService.filterServerData(this.findServerByName, this.getPcType, this.getPcTag);
-    });
+    this.route.queryParams
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((params: Params) => {
+        this.getPcType = params['pc_type'] || '';
+        this.getPcTag = params['pc_tag'] || '';
+        this.findServerByName = params['server_name'] || '';
+        this.serverPCService.filterServerData(this.findServerByName, this.getPcType, this.getPcTag);
+      });
+
+    this.updateServerData();
   }
 
-  findServerInput() {
+  updateServerData() {
     this.serverPCService.updateQueryParams(this.getPcType, this.getPcTag, this.findServerByName);
-    this.filterSubscription = this.serverPCService.filterServerData(
+    this.serverPCService.filterServerData(
       this.findServerByName.trim().toLowerCase(),
       this.getPcType,
       this.getPcTag
-    ).subscribe((filteredData: IServerData[]) => {
-      this.serverPCService.serverPCdata$.next(filteredData);
-    });
+    ).pipe(takeUntil(this.destroy$))
+      .subscribe((filteredData: IServerData[]) => {
+        this.serverPCService.serverPCdata$.next(filteredData);
+      });
+  }
+
+  findServerInput() {
+    this.updateServerData();
   }
 
   toggleFilter() {
@@ -48,11 +56,7 @@ export class FindServerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.subParams) {
-      this.subParams.unsubscribe();
-    }
-    if (this.filterSubscription) {
-      this.filterSubscription.unsubscribe();
-    }
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 }

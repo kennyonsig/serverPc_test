@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
-import { Subscription } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { ServerPCService } from '../server-pc.service';
 import { ActivatedRoute } from '@angular/router';
+import { IServerData } from '../../../../../interface/IServerData';
 
 @Component({
   selector: 'app-filter-server',
@@ -12,29 +13,29 @@ import { ActivatedRoute } from '@angular/router';
 export class FilterServerComponent implements OnInit, OnDestroy {
 
   readonly crossIcon = faXmark;
+  readonly pcTypes = ['default', 'vm_host', 'vm_guest'];
+  readonly pcTags = ['red tag', 'blue tag', 'green tag', 'yellow tag', 'orange tag'];
   showTypeDropdown = false;
   showTagDropdown = false;
-  pcTypes = ['default', 'vm_host', 'vm_guest'];
-  pcTags = ['red tag', 'blue tag', 'green tag', 'yellow tag', 'orange tag'];
   selectedType = '';
   selectedTag = '';
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   @Output() isCloseFilter: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() pcTag: EventEmitter<string> = new EventEmitter<string>();
   @Output() pcType: EventEmitter<string> = new EventEmitter<string>();
   @Input() findServer: string;
 
-  private subParamFilter: Subscription;
-
   constructor(private serverPCService: ServerPCService,
               private route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.subParamFilter = this.route.queryParams.subscribe(params => {
-      this.selectedType = params['pc_type'] || '';
-      this.selectedTag = params['pc_tag'] || '';
-    });
+    this.route.queryParams.pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        this.selectedTag = params['pc_tag'] || '';
+        this.selectedType = params['pc_type'] || '';
+      });
   }
 
   toggleTypeDropdown() {
@@ -62,19 +63,31 @@ export class FilterServerComponent implements OnInit, OnDestroy {
   useFilter() {
     this.pcTag.emit(this.selectedTag);
     this.pcType.emit(this.selectedType);
-    this.serverPCService.updateQueryParams(this.selectedType, this.selectedTag, this.findServer);
+    this.updateServerData();
   }
 
   clearFilter() {
     this.selectedType = '';
     this.selectedTag = '';
     this.serverPCService.clearQueryParams();
+    this.updateServerData();
+  }
+
+  updateServerData() {
+    this.serverPCService.updateQueryParams(this.selectedType, this.selectedTag, this.findServer);
+    this.serverPCService.filterServerData(
+      this.findServer.trim().toLowerCase(),
+      this.selectedType,
+      this.selectedTag
+    ).pipe(takeUntil(this.destroy$))
+      .subscribe((filteredData: IServerData[]) => {
+        this.serverPCService.serverPCdata$.next(filteredData);
+      });
   }
 
   ngOnDestroy() {
-    if (this.subParamFilter) {
-      this.subParamFilter.unsubscribe();
-    }
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 }
 

@@ -36,11 +36,7 @@ export class ServerPCService {
   clearQueryParams() {
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: {
-        server_name: '',
-        pc_type: '',
-        pc_tag: ''
-      },
+      queryParams: { server_name: '', pc_type: '', pc_tag: '' },
       queryParamsHandling: 'merge',
       replaceUrl: true
     });

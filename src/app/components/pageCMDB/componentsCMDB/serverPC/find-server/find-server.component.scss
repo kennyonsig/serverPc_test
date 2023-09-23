@@ -1,5 +1,16 @@
 .find-and-filter {
   display: flex;
+  position: relative;
+}
+
+.input-filter-block {
+  flex-grow: 1;
+}
+
+app-filter-server {
+  position: absolute;
+  right: 0;
+  top: 37px
 }
 
 .search-input {
@@ -18,17 +29,6 @@
   }
 }
 
-
-.input-filter-block {
-  position: relative;
-  flex-grow: 1;
-}
-
-app-filter-server {
-  position: absolute;
-  right: 200px;
-  top: 138px
-}
 
 .filter-btn {
   position: absolute;
